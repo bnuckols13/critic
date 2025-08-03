@@ -1,0 +1,2938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧠 Find the Rubric: Superego Critique Tool</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #8b5cf6;
+      --accent: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --id-color: #f97316;
+      --ego-color: #06b6d4;
+      --superego-color: #8b5cf6;
+      --background: #0f172a;
+      --surface: #1e293b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --border: #334155;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+      --radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e1b4b 100%);
+      min-height: 100vh;
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes gentlePulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes slideInFromBottom {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200px 0; }
+      100% { background-position: calc(200px + 100%) 0; }
+    }
+
+    @keyframes morph {
+      0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+      50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+    }
+
+    @keyframes flow {
+      0% { transform: translateX(-100%) rotate(0deg); }
+      100% { transform: translateX(100vw) rotate(360deg); }
+    }
+
+    /* Header */
+    header {
+      background: rgba(30, 41, 59, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .phase-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .phase-badge {
+      background: var(--primary);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      animation: pulse 2s infinite;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Main Content */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      .psyche-compass {
+        width: 600px;
+        height: 300px;
+      }
+      
+      .compass-point i {
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
+      }
+      
+      .welcome-title {
+        font-size: 3rem;
+      }
+      
+      .welcome-text {
+        font-size: 1.25rem;
+        max-width: 600px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .welcome-section {
+        padding: 4rem 1rem;
+        min-height: 80vh;
+      }
+      
+      .psyche-compass {
+        width: 100%;
+        height: 250px;
+        margin: 3rem auto;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .compass-points {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .compass-center {
+        width: 80px;
+        height: 80px;
+        font-size: 2rem;
+      }
+      
+      .compass-point {
+        padding: 1rem;
+        gap: 1rem;
+      }
+      
+      .compass-point i {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+      }
+      
+      .compass-point span {
+        font-size: 1rem;
+      }
+      
+      .welcome-title {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+      }
+      
+      .welcome-text {
+        font-size: 1.125rem;
+        margin-bottom: 3rem;
+        max-width: 100%;
+      }
+      
+      .begin-mapping-btn {
+        margin-top: 2rem;
+        font-size: 1.125rem;
+        padding: 1rem 2rem;
+      }
+      
+      .id-point {
+        top: 30px;
+      }
+      
+      .ego-point {
+        bottom: 30px;
+      }
+      
+      .superego-point {
+        right: 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .welcome-section {
+        padding: 3rem 1rem;
+      }
+      
+      .psyche-compass {
+        height: 350px;
+      }
+      
+      .welcome-title {
+        font-size: 2rem;
+      }
+      
+      .welcome-text {
+        font-size: 1rem;
+      }
+      
+      .compass-point {
+        padding: 0.75rem;
+      }
+      
+      .compass-point i {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+      }
+    }
+
+    /* Navigation */
+    .nav-container {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--id-color), var(--ego-color), var(--superego-color));
+      background-size: 200% 100%;
+      animation: gradientShift 3s ease infinite;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-tab {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-tab::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .nav-tab:hover::before {
+      left: 100%;
+    }
+
+    .nav-tab.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: var(--shadow-md);
+    }
+
+    .nav-tab.completed {
+      background: var(--success);
+      color: white;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      margin-top: 1rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--id-color), var(--ego-color), var(--superego-color));
+      border-radius: 4px;
+      transition: width 0.5s ease;
+      position: relative;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    /* Phase Content */
+    .phase {
+      display: none;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .phase.active {
+      display: block;
+    }
+
+    .section {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--primary), var(--secondary));
+    }
+
+    .section:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .section h3 {
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section h3 i {
+      color: var(--primary);
+    }
+
+    /* Welcome Section */
+    .welcome-section {
+      text-align: center;
+      padding: 6rem 2rem;
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 30% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 60%),
+                  radial-gradient(circle at 70% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .welcome-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      font-weight: 700;
+      margin-bottom: 3rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 3s ease infinite;
+      position: relative;
+      z-index: 1;
+    }
+
+    .welcome-text {
+      font-size: 1.5rem;
+      color: var(--text-secondary);
+      margin-bottom: 6rem;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+      position: relative;
+      z-index: 1;
+      animation: fadeInUp 1s ease-out 0.5s both;
+    }
+
+    .psyche-compass {
+      position: relative;
+      width: 800px;
+      height: 400px;
+      margin: 6rem auto;
+      animation: fadeInUp 1s ease-out 1s both;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .compass-points {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      gap: 2rem;
+    }
+
+    .compass-point {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      padding: 2rem;
+      border-radius: var(--radius);
+      animation: fadeInUp 1s ease-out 1.5s both;
+    }
+
+    .compass-point:hover {
+      color: var(--text-primary);
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+    }
+
+    .compass-point:active {
+      transform: scale(1.02);
+    }
+
+    .compass-point i {
+      font-size: 3.5rem;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .compass-point i::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      right: -8px;
+      bottom: -8px;
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .compass-point:hover i::before {
+      opacity: 1;
+    }
+
+    .compass-point span {
+      font-weight: 600;
+      text-align: center;
+      font-size: 1.125rem;
+    }
+
+    .id-point {
+      animation: fadeInUp 1s ease-out 1.5s both;
+    }
+
+    .id-point i {
+      animation: gentlePulse 3s ease-in-out infinite;
+    }
+
+    .id-point i {
+      color: white;
+      background: linear-gradient(135deg, var(--id-color), #ea580c);
+      box-shadow: 0 12px 35px rgba(249, 115, 22, 0.3);
+    }
+
+    .id-point:hover i {
+      box-shadow: 0 16px 45px rgba(249, 115, 22, 0.5);
+      transform: scale(1.05) rotate(5deg);
+    }
+
+    .id-point:hover i::before {
+      background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 70%);
+    }
+
+    .ego-point {
+      animation: fadeInUp 1s ease-out 1.7s both;
+    }
+
+    .ego-point i {
+      animation: gentlePulse 3s ease-in-out infinite 1s;
+    }
+
+    .ego-point i {
+      color: white;
+      background: linear-gradient(135deg, var(--ego-color), #0891b2);
+      box-shadow: 0 12px 35px rgba(6, 182, 212, 0.3);
+    }
+
+    .ego-point:hover i {
+      box-shadow: 0 16px 45px rgba(6, 182, 212, 0.5);
+      transform: scale(1.05) rotate(-5deg);
+    }
+
+    .ego-point:hover i::before {
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+    }
+
+    .superego-point {
+      animation: fadeInUp 1s ease-out 1.9s both;
+    }
+
+    .superego-point i {
+      animation: gentlePulse 3s ease-in-out infinite 2s;
+    }
+
+    .superego-point i {
+      color: white;
+      background: linear-gradient(135deg, var(--superego-color), #7c3aed);
+      box-shadow: 0 12px 35px rgba(139, 92, 246, 0.3);
+    }
+
+    .superego-point:hover i {
+      box-shadow: 0 16px 45px rgba(139, 92, 246, 0.5);
+      transform: scale(1.05) rotate(5deg);
+    }
+
+    .superego-point:hover i::before {
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+    }
+
+    .begin-mapping-btn {
+      margin-top: 4rem;
+      font-size: 1.25rem;
+      padding: 1.25rem 3rem;
+      border-radius: 50px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      animation: slideInFromBottom 1s ease-out 2s both;
+    }
+
+    .begin-mapping-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .begin-mapping-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(99, 102, 241, 0.4);
+    }
+
+    .begin-mapping-btn:hover::before {
+      left: 100%;
+    }
+
+    /* Archetype Cards */
+    .archetype-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .archetype-card {
+      perspective: 1000px;
+      height: 400px;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
+    .archetype-card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .archetype-card.deeper .card-inner {
+      transform: rotateY(180deg) scale(1.05);
+    }
+
+    .archetype-card.philosophy .card-inner {
+      transform: rotateY(180deg) scale(1.1);
+    }
+
+    /* Smooth transitions for all card states */
+    .archetype-card .card-inner {
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card-front, .card-back, .card-philosophy {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      border: 2px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+    }
+
+    .card-philosophy {
+      transform: rotateY(180deg) scale(1.05);
+      background: linear-gradient(135deg, var(--surface), rgba(99, 102, 241, 0.1));
+      opacity: 0;
+      transition: opacity 0.6s ease-in-out;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.05);
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      z-index: 15;
+      border-radius: var(--radius);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-philosophy.show {
+      opacity: 1;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    /* Backdrop for philosophy sections */
+    .philosophy-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .philosophy-backdrop.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .card-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .archetype-card[data-archetype="id"] .card-icon {
+      background: var(--id-color);
+    }
+
+    .archetype-card[data-archetype="ego"] .card-icon {
+      background: var(--ego-color);
+    }
+
+    .archetype-card[data-archetype="superego"] .card-icon {
+      background: var(--superego-color);
+    }
+
+    .card-front h4, .card-back h4 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .card-front p, .card-back p {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+
+    .flip-btn, .deeper-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flip-btn::before, .deeper-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .flip-btn:hover::before, .deeper-btn:hover::before {
+      left: 100%;
+    }
+
+    .flip-btn:hover, .deeper-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .flip-btn:active, .deeper-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    }
+
+    .philosophy-content {
+      text-align: left;
+      width: 100%;
+      padding: 2rem;
+    }
+
+    .philosophy-content h4 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+      font-size: 1.5rem;
+    }
+
+    .quote-block {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1rem;
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+      border-left: 4px solid var(--primary);
+    }
+
+    .quote-block p {
+      margin: 0;
+      font-style: italic;
+      color: var(--text-secondary);
+    }
+
+    .reflection-prompt {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .reflection-prompt h5 {
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .reflection-prompt p {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .reflection-input {
+      width: 100%;
+      min-height: 100px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      color: var(--text-primary);
+      font-family: inherit;
+      resize: vertical;
+    }
+
+    .reflection-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .enter-btn {
+      background: var(--success);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 1rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .enter-btn:hover {
+      background: #059669;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .enter-btn:active {
+      transform: translateY(0);
+    }
+
+    .reflection-saved {
+      background: rgba(16, 185, 129, 0.1) !important;
+      border-color: var(--success) !important;
+    }
+
+    .saved-indicator {
+      color: var(--success);
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .saved-indicator.show {
+      opacity: 1;
+    }
+
+    .previous-reflection {
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .previous-reflection h6 {
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .previous-reflection blockquote {
+      margin: 0;
+      color: var(--text-secondary);
+      font-style: italic;
+      border-left: 3px solid var(--primary);
+      padding-left: 1rem;
+    }
+
+    .quote-block {
+      background: rgba(99, 102, 241, 0.1);
+      padding: 1rem;
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+      border-left: 3px solid var(--primary);
+    }
+
+    .quote-block p {
+      margin: 0;
+      font-style: italic;
+    }
+
+    .reflection-prompt {
+      margin-top: 1.5rem;
+    }
+
+    .reflection-prompt h5 {
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .reflection-input {
+      width: 100%;
+      min-height: 80px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--background);
+      color: var(--text-primary);
+      font-size: 0.875rem;
+    }
+
+    /* Identification Section */
+    .identification-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .identification-btn {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .identification-btn:hover {
+      border-color: var(--primary);
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .identification-btn.selected {
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .identification-btn i {
+      font-size: 2rem;
+    }
+
+    .identification-btn.id-dominant i {
+      color: var(--id-color);
+    }
+
+    .identification-btn.ego-dominant i {
+      color: var(--ego-color);
+    }
+
+    .identification-btn.superego-dominant i {
+      color: var(--superego-color);
+    }
+
+    .identification-btn span {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .identification-btn small {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+    }
+
+    .journaling-section {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Quote Carousel */
+    .quote-carousel {
+      position: relative;
+      height: 200px;
+      margin: 2rem 0;
+      overflow: hidden;
+    }
+
+    .quote-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quote-slide.active {
+      opacity: 1;
+    }
+
+    .quote-content {
+      text-align: center;
+      max-width: 600px;
+    }
+
+    .quote-content p {
+      font-size: 1.25rem;
+      font-style: italic;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .quote-author {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .carousel-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .carousel-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--text-secondary);
+    }
+
+    .carousel-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .carousel-indicators {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .indicator.active {
+      background: var(--primary);
+    }
+
+    .save-quote-btn {
+      margin-top: 1rem;
+    }
+
+    /* Integration Section */
+    .integration-animation {
+      display: flex;
+      justify-content: center;
+      margin: 3rem 0;
+    }
+
+    .integration-circle {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .force {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: white;
+      animation: morph 6s ease-in-out infinite;
+    }
+
+    .id-force {
+      background: var(--id-color);
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .ego-force {
+      background: var(--ego-color);
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .superego-force {
+      background: var(--superego-color);
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+    }
+
+    .final-prompt {
+      margin: 2rem 0;
+    }
+
+    .begin-tool-btn {
+      margin-top: 2rem;
+      font-size: 1.125rem;
+      padding: 1rem 2rem;
+    }
+
+    /* Archetype Modal */
+    .archetype-content {
+      text-align: center;
+    }
+
+    .archetype-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: white;
+      margin: 0 auto 2rem;
+    }
+
+    .archetype-icon.id {
+      background: var(--id-color);
+      box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4);
+    }
+
+    .archetype-icon.ego {
+      background: var(--ego-color);
+      box-shadow: 0 8px 25px rgba(6, 182, 212, 0.4);
+    }
+
+    .archetype-icon.superego {
+      background: var(--superego-color);
+      box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+    }
+
+    .archetype-description {
+      text-align: left;
+      line-height: 1.7;
+    }
+
+    .archetype-description h3 {
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+    }
+
+    .archetype-description p {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .archetype-description ul {
+      color: var(--text-secondary);
+      margin-left: 1.5rem;
+    }
+
+    .archetype-description li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Section Intro */
+    .section-intro {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 1rem;
+      transition: var(--transition);
+      background: var(--surface);
+      color: var(--text-primary);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .form-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 0.875rem 1.75rem;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary {
+      background: var(--text-secondary);
+      color: white;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-warning {
+      background: var(--warning);
+      color: white;
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* Navigation Buttons */
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Quote Cards */
+    .quote-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border-left: 4px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-card::before {
+      content: '"';
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      font-size: 4rem;
+      color: var(--primary);
+      opacity: 0.3;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .quote-text {
+      font-style: italic;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      position: relative;
+      z-index: 1;
+    }
+
+    .quote-author {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    /* Interactive Elements */
+    .interactive-element {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border: 2px solid var(--border);
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .interactive-element:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .interactive-element.selected {
+      border-color: var(--success);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    /* Flow Animation */
+    .flow-container {
+      position: relative;
+      height: 100px;
+      overflow: hidden;
+      margin: 2rem 0;
+    }
+
+    .flow-element {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 50%;
+      animation: flow 4s linear infinite;
+    }
+
+    .flow-element:nth-child(2) {
+      animation-delay: 1s;
+      background: var(--secondary);
+    }
+
+    .flow-element:nth-child(3) {
+      animation-delay: 2s;
+      background: var(--accent);
+    }
+
+    /* Modals */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeInUp 0.3s ease-out;
+    }
+
+    .modal-content {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 2rem;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      animation: slideInRight 0.3s ease-out;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      background: var(--background);
+      color: var(--text-primary);
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Toast Notifications */
+    .toast {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      background: var(--surface);
+      color: var(--text-primary);
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      z-index: 1000;
+      transform: translateX(100%);
+      transition: var(--transition);
+      border-left: 4px solid var(--success);
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    .toast.error {
+      border-left-color: var(--error);
+    }
+
+    .toast.warning {
+      border-left-color: var(--warning);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .nav-tabs {
+        flex-direction: column;
+      }
+
+      .nav-buttons {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .psyche-map {
+        grid-template-columns: 1fr;
+      }
+
+      main {
+        padding: 1rem;
+      }
+    }
+
+    /* Floating Action Button */
+    .fab {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      transition: var(--transition);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .fab:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+    }
+
+    /* Toast Container */
+    #toastContainer {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="header-left">
+        <div class="logo">🧠 Find the Rubric</div>
+        <div class="phase-indicator">
+          Phase <span id="phaseLabelHeader">1</span> of <span id="phaseTotalHeader">5</span>
+          <span class="phase-badge" id="phaseBadge">Exploration</span>
+        </div>
+      </div>
+      <div class="header-controls">
+        <button class="btn btn-secondary" id="restartBtn">
+          <i class="fas fa-redo"></i>
+          Restart Journey
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Navigation & Progress -->
+    <div class="nav-container">
+      <div class="nav-tabs" id="navTabs">
+        <!-- Tabs will be generated dynamically -->
+      </div>
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase Content -->
+    <div class="phase active" id="phase1">
+      <!-- Welcome Section -->
+      <div class="section welcome-section">
+        <div class="welcome-content">
+          <h2 class="welcome-title">🧭 Charting the Terrain</h2>
+          <p class="welcome-text">
+            You are not a monolith. Inside you live conflicting forces: instinct, reflection, judgment. 
+            This journey begins with mapping them.
+          </p>
+          <div class="psyche-compass">
+            <div class="compass-points">
+              <div class="compass-point id-point">
+                <i class="fas fa-fire"></i>
+                <span>Id</span>
+              </div>
+              <div class="compass-point ego-point">
+                <i class="fas fa-eye"></i>
+                <span>Ego</span>
+              </div>
+              <div class="compass-point superego-point">
+                <i class="fas fa-gavel"></i>
+                <span>Superego</span>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary begin-mapping-btn" id="beginMappingBtn">
+            <i class="fas fa-map"></i>
+            Begin Mapping
+          </button>
+        </div>
+      </div>
+
+      <!-- Archetypes Section (initially hidden) -->
+      <div class="section archetypes-section" id="archetypesSection" style="display: none;">
+        <h3><i class="fas fa-cards-blank"></i> The Archetypes: Learn Through Interactive Cards</h3>
+        <p class="section-intro">Each force of the psyche is a flippable card with multiple layers of understanding.</p>
+        
+        <div class="archetype-cards">
+          <!-- Id Card -->
+          <div class="archetype-card" data-archetype="id">
+            <div class="card-inner">
+              <div class="card-front">
+                <div class="card-icon">
+                  <i class="fas fa-fire"></i>
+                </div>
+                <h4>The Wild One</h4>
+                <p>Unfiltered desire. Hunger. Rage. Joy.</p>
+                <button class="flip-btn">Click to Flip</button>
+              </div>
+              <div class="card-back">
+                <div class="card-content">
+                  <h4>Your Primal Psychic Energy</h4>
+                  <p>Creative, libidinal, unbound by rules.</p>
+                  <button class="deeper-btn">Go Deeper</button>
+                </div>
+              </div>
+              <div class="card-philosophy" style="display: none;">
+                <div class="philosophy-content">
+                  <h4>Philosophical Insights</h4>
+                  <div class="quote-block">
+                    <p><strong>Deleuze & Guattari:</strong> "The unconscious is productive, not representational."</p>
+                  </div>
+                  <div class="quote-block">
+                    <p><strong>Freudian:</strong> "The cauldron of seething excitement."</p>
+                  </div>
+                  <div class="reflection-prompt">
+                    <h5>Reflection:</h5>
+                    <p>What do you long for that feels irrational or forbidden?</p>
+                    <textarea class="reflection-input" placeholder="Share your thoughts..." data-archetype="id"></textarea>
+                    <div class="saved-indicator">✓ Saved</div>
+                    <button class="enter-btn" onclick="window.superegoApp.hidePhilosophyBackdrop()">
+                      <i class="fas fa-check"></i> Enter
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ego Card -->
+          <div class="archetype-card" data-archetype="ego">
+            <div class="card-inner">
+              <div class="card-front">
+                <div class="card-icon">
+                  <i class="fas fa-balance-scale"></i>
+                </div>
+                <h4>The Mediator</h4>
+                <p>Trying to make it all work.</p>
+                <button class="flip-btn">Click to Flip</button>
+              </div>
+              <div class="card-back">
+                <div class="card-content">
+                  <h4>Your Reflective Self</h4>
+                  <p>Who decides between chaos and order.</p>
+                  <button class="deeper-btn">Go Deeper</button>
+                </div>
+              </div>
+              <div class="card-philosophy" style="display: none;">
+                <div class="philosophy-content">
+                  <h4>Philosophical Insights</h4>
+                  <div class="quote-block">
+                    <p><strong>Kant:</strong> "The self as a critique machine — bound by the transcendental."</p>
+                  </div>
+                  <div class="quote-block">
+                    <p><strong>Jung:</strong> "The Ego emerges from the matrix of the Self."</p>
+                  </div>
+                  <div class="reflection-prompt">
+                    <h5>Reflection:</h5>
+                    <p>When do you mediate inner tension? Who is the 'you' that decides?</p>
+                    <textarea class="reflection-input" placeholder="Share your thoughts..." data-archetype="ego"></textarea>
+                    <div class="saved-indicator">✓ Saved</div>
+                    <button class="enter-btn" onclick="window.superegoApp.hidePhilosophyBackdrop()">
+                      <i class="fas fa-check"></i> Enter
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Superego Card -->
+          <div class="archetype-card" data-archetype="superego">
+            <div class="card-inner">
+              <div class="card-front">
+                <div class="card-icon">
+                  <i class="fas fa-scroll"></i>
+                </div>
+                <h4>The Judge</h4>
+                <p>Shoulds, musts, perfection.</p>
+                <button class="flip-btn">Click to Flip</button>
+              </div>
+              <div class="card-back">
+                <div class="card-content">
+                  <h4>Your Internalized Ideals</h4>
+                  <p>Shaped by culture, family, and fear.</p>
+                  <button class="deeper-btn">Go Deeper</button>
+                </div>
+              </div>
+              <div class="card-philosophy" style="display: none;">
+                <div class="philosophy-content">
+                  <h4>Philosophical Insights</h4>
+                  <div class="quote-block">
+                    <p><strong>Lacan:</strong> "The superego is obscene law — enjoy what you must."</p>
+                  </div>
+                  <div class="quote-block">
+                    <p><strong>Roesler:</strong> "The superego is a social machine — internalized police."</p>
+                  </div>
+                  <div class="reflection-prompt">
+                    <h5>Reflection:</h5>
+                    <p>Whose voice does your superego echo?</p>
+                    <textarea class="reflection-input" placeholder="Share your thoughts..." data-archetype="superego"></textarea>
+                    <div class="saved-indicator">✓ Saved</div>
+                    <button class="enter-btn" onclick="window.superegoApp.hidePhilosophyBackdrop()">
+                      <i class="fas fa-check"></i> Enter
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Identification Section -->
+      <div class="section identification-section" id="identificationSection" style="display: none;">
+        <h3><i class="fas fa-volume-up"></i> What's Loudest in You Today?</h3>
+        <p class="section-intro">Which force is most dominant in your experience right now?</p>
+        
+        <div class="identification-buttons">
+          <button class="identification-btn id-dominant" data-dominant="id">
+            <i class="fas fa-fire"></i>
+            <span>Id is in charge</span>
+            <small>Desires, impulses, raw energy</small>
+          </button>
+          <button class="identification-btn ego-dominant" data-dominant="ego">
+            <i class="fas fa-balance-scale"></i>
+            <span>Ego's overwhelmed</span>
+            <small>Mediating, deciding, balancing</small>
+          </button>
+          <button class="identification-btn superego-dominant" data-dominant="superego">
+            <i class="fas fa-gavel"></i>
+            <span>Superego's brutal</span>
+            <small>Judging, criticizing, demanding</small>
+          </button>
+        </div>
+
+        <div class="journaling-section" id="journalingSection" style="display: none;">
+          <label class="form-label">Why do you think that's true today?</label>
+          <textarea class="form-input form-textarea" id="dominantReason" placeholder="Reflect on what's making this force so prominent..."></textarea>
+        </div>
+      </div>
+
+      <!-- Quote Carousel Section -->
+      <div class="section quote-carousel-section" id="quoteCarouselSection" style="display: none;">
+        <h3><i class="fas fa-quote-left"></i> Philosophical Anchors</h3>
+        <p class="section-intro">Reflect on these insights as you prepare for your journey.</p>
+        
+        <div class="quote-carousel">
+          <div class="quote-slide active" data-slide="1">
+            <div class="quote-content">
+              <p>"Where Id was, Ego shall be."</p>
+              <span class="quote-author">— Freud</span>
+            </div>
+          </div>
+          <div class="quote-slide" data-slide="2">
+            <div class="quote-content">
+              <p>"The Superego is the revenge of the repressed."</p>
+              <span class="quote-author">— Deleuze</span>
+            </div>
+          </div>
+          <div class="quote-slide" data-slide="3">
+            <div class="quote-content">
+              <p>"Every form of mastery masks repression."</p>
+              <span class="quote-author">— Marcuse</span>
+            </div>
+          </div>
+          <div class="quote-slide" data-slide="4">
+            <div class="quote-content">
+              <p>"The unconscious is productive, not representational."</p>
+              <span class="quote-author">— Deleuze & Guattari</span>
+            </div>
+          </div>
+          <div class="quote-slide" data-slide="5">
+            <div class="quote-content">
+              <p>"Critique is the process of making judgment possible without submission to dogma."</p>
+              <span class="quote-author">— Kant</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="carousel-controls">
+          <button class="carousel-btn prev-btn" id="prevQuote">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <div class="carousel-indicators">
+            <span class="indicator active" data-slide="1"></span>
+            <span class="indicator" data-slide="2"></span>
+            <span class="indicator" data-slide="3"></span>
+            <span class="indicator" data-slide="4"></span>
+            <span class="indicator" data-slide="5"></span>
+          </div>
+          <button class="carousel-btn next-btn" id="nextQuote">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <button class="btn btn-warning save-quote-btn" id="saveQuoteBtn">
+          <i class="fas fa-star"></i>
+          Save This Quote for Later
+        </button>
+      </div>
+
+      <!-- Integration Section -->
+      <div class="section integration-section" id="integrationSection" style="display: none;">
+        <h3><i class="fas fa-circle"></i> Integration & Readiness</h3>
+        
+        <div class="integration-animation">
+          <div class="integration-circle">
+            <div class="force id-force">
+              <i class="fas fa-fire"></i>
+            </div>
+            <div class="force ego-force">
+              <i class="fas fa-eye"></i>
+            </div>
+            <div class="force superego-force">
+              <i class="fas fa-gavel"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="final-prompt">
+          <label class="form-label">What do you want to understand about your inner critic?</label>
+          <textarea class="form-input form-textarea" id="innerCriticQuestion" placeholder="What specific aspect of your self-criticism would you like to explore?"></textarea>
+        </div>
+
+        <button class="btn btn-success begin-tool-btn" id="beginToolBtn">
+          <i class="fas fa-arrow-right"></i>
+          Begin the Tool
+        </button>
+      </div>
+    </div>
+
+    <div class="phase" id="phase2">
+      <div class="section">
+        <h3><i class="fas fa-search"></i> Identifying Your Internal Critic</h3>
+        <div class="form-group">
+          <label class="form-label">What harsh self-criticism do you often hear in your mind?</label>
+          <textarea class="form-input form-textarea" id="selfCriticism" placeholder="e.g., 'I'm not good enough,' 'I should be more productive,' 'I'm failing at...'"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">When do you hear this voice most strongly?</label>
+          <select class="form-input" id="criticismTrigger">
+            <option value="">Select a trigger...</option>
+            <option value="work">At work or when working</option>
+            <option value="relationships">In relationships</option>
+            <option value="social">In social situations</option>
+            <option value="alone">When alone</option>
+            <option value="comparison">When comparing myself to others</option>
+            <option value="mistakes">When I make mistakes</option>
+          </select>
+        </div>
+
+        <div class="quote-card">
+          <div class="quote-text">
+            "Critique is the process of making judgment possible without submission to dogma."
+          </div>
+          <div class="quote-author">— Immanuel Kant</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="phase3">
+      <div class="section">
+        <h3><i class="fas fa-compass"></i> Tracing the Rubric's Origins</h3>
+        <div class="form-group">
+          <label class="form-label">Where do you think this standard came from?</label>
+          <div class="interactive-element" data-origin="family">
+            <strong>Family expectations</strong><br>
+            Messages from parents, siblings, or family culture
+          </div>
+          <div class="interactive-element" data-origin="society">
+            <strong>Social norms</strong><br>
+            Cultural expectations, media, social media
+          </div>
+          <div class="interactive-element" data-origin="education">
+            <strong>Educational system</strong><br>
+            School experiences, teachers, academic standards
+          </div>
+          <div class="interactive-element" data-origin="religion">
+            <strong>Religious or spiritual beliefs</strong><br>
+            Religious teachings or spiritual practices
+          </div>
+          <div class="interactive-element" data-origin="work">
+            <strong>Workplace culture</strong><br>
+            Professional expectations and workplace norms
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Who benefits from this standard?</label>
+          <textarea class="form-input form-textarea" id="whoBenefits" placeholder="Think about who gains from you following this rule..."></textarea>
+        </div>
+
+        <div class="flow-container">
+          <div class="flow-element"></div>
+          <div class="flow-element"></div>
+          <div class="flow-element"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="phase4">
+      <div class="section">
+        <h3><i class="fas fa-magic"></i> Re-authoring Your Standards</h3>
+        <div class="form-group">
+          <label class="form-label">What would a healing, compassionate version of this standard look like?</label>
+          <textarea class="form-input form-textarea" id="compassionateStandard" placeholder="Transform your harsh critic into a supportive voice..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">What would it feel like to live by this new standard?</label>
+          <textarea class="form-input form-textarea" id="newFeeling" placeholder="Describe the emotions and experiences..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">What would you do differently with this new perspective?</label>
+          <textarea class="form-input form-textarea" id="newActions" placeholder="How would your behavior change?"></textarea>
+        </div>
+
+        <div class="quote-card">
+          <div class="quote-text">
+            "The ego becomes free not by erasing the law but by reflecting on its conditions of possibility."
+          </div>
+          <div class="quote-author">— Kantian Critique</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase" id="phase5">
+      <div class="section">
+        <h3><i class="fas fa-seedling"></i> Integration & Growth</h3>
+        <div class="form-group">
+          <label class="form-label">Your Personal Rubric Transformation</label>
+          <div class="card">
+            <div id="transformationSummary">
+              <!-- Summary will be generated dynamically -->
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Daily Practice Suggestions</label>
+          <div class="card">
+            <div id="dailyPractices">
+              <!-- Practices will be generated dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <div class="quote-card">
+          <div class="quote-text">
+            "Instead of repressing desire, transform the 'law' from an Oedipal capture into something generative—let it flow differently."
+          </div>
+          <div class="quote-author">— Deleuze & Guattari</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+      <button class="btn btn-secondary" id="prevBtn" disabled>
+        <i class="fas fa-arrow-left"></i>
+        Previous
+      </button>
+      <div class="nav-buttons-right">
+        <button class="btn btn-warning" id="saveBtn">
+          <i class="fas fa-save"></i>
+          Save Journey
+        </button>
+        <button class="btn btn-primary" id="nextBtn">
+          Next
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Floating Action Button -->
+  <button class="fab" id="helpFab" title="Get Help">
+    <i class="fas fa-question"></i>
+  </button>
+
+  <!-- Archetype Description Modal -->
+  <div class="modal" id="archetypeModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="archetypeTitle"><i class="fas fa-brain"></i> Archetype Description</h2>
+        <button class="modal-close" id="archetypeClose">&times;</button>
+      </div>
+      <div class="archetype-content">
+        <div class="archetype-icon" id="archetypeIcon">
+          <i class="fas fa-fire"></i>
+        </div>
+        <div class="archetype-description" id="archetypeDescription">
+          <!-- Content will be populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Modal -->
+  <div class="modal" id="helpModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2><i class="fas fa-question-circle"></i> Therapeutic Guidance</h2>
+        <button class="modal-close" id="helpClose">&times;</button>
+      </div>
+      <div class="help-content">
+        <div class="card">
+          <h3><i class="fas fa-lightbulb"></i> Understanding the Process</h3>
+          <p>This tool is based on the integration of Freudian psychology, Kantian critique, and Deleuzian philosophy. It helps you:</p>
+          <ul>
+            <li>Identify your internalized standards and expectations</li>
+            <li>Trace their origins and question their validity</li>
+            <li>Transform harsh self-criticism into compassionate self-reflection</li>
+            <li>Create new, life-affirming standards</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3><i class="fas fa-heart"></i> Self-Compassion Reminder</h3>
+          <p>Remember: You are not your thoughts. The superego's voice is not your authentic self. This process is about liberation, not perfection.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer"></div>
+  
+  <!-- Philosophy Backdrop -->
+  <div id="philosophyBackdrop" class="philosophy-backdrop"></div>
+
+  <script>
+    // Enhanced App State Management
+    class SuperegoCritiqueApp {
+      constructor() {
+        this.currentPhase = 1;
+        this.totalPhases = 5;
+        this.analytics = { enter: {}, timespent: {}, interactions: {} };
+        this.userData = {};
+        this.reflections = {};
+        this.init();
+      }
+
+      init() {
+        this.setupEventListeners();
+        this.generateNavigation();
+        this.updateProgress();
+        this.logEntry(1);
+        this.loadUserData();
+        this.loadReflections();
+      }
+
+      setupEventListeners() {
+        // Navigation
+        document.getElementById('nextBtn').addEventListener('click', () => this.nextPhase());
+        document.getElementById('prevBtn').addEventListener('click', () => this.prevPhase());
+        document.getElementById('restartBtn').addEventListener('click', () => this.restart());
+
+        // Phase 1 Interactive Elements
+        this.setupPhase1Interactions();
+
+        // Interactive Elements
+        document.querySelectorAll('.interactive-element').forEach(element => {
+          element.addEventListener('click', (e) => {
+            // Remove previous selections
+            document.querySelectorAll('.interactive-element').forEach(el => {
+              el.classList.remove('selected');
+            });
+            // Select current element
+            e.currentTarget.classList.add('selected');
+            this.showToast('Origin identified!', 'success');
+          });
+        });
+
+        // Modals
+        document.getElementById('helpFab').addEventListener('click', () => this.showModal('helpModal'));
+        document.getElementById('helpClose').addEventListener('click', () => this.hideModal('helpModal'));
+        document.getElementById('archetypeClose').addEventListener('click', () => this.hideModal('archetypeModal'));
+
+        // Philosophy backdrop
+        document.getElementById('philosophyBackdrop').addEventListener('click', () => {
+          this.hidePhilosophyBackdrop();
+        });
+
+        // Save Progress
+        document.getElementById('saveBtn').addEventListener('click', () => this.saveProgress());
+
+        // Auto-save on input changes
+        document.querySelectorAll('input, textarea, select').forEach(input => {
+          input.addEventListener('input', () => this.autoSave());
+        });
+
+        // Reflection input handlers
+        this.setupReflectionHandlers();
+      }
+
+      setupPhase1Interactions() {
+        // Begin Mapping Button
+        const beginMappingBtn = document.getElementById('beginMappingBtn');
+        if (beginMappingBtn) {
+          beginMappingBtn.addEventListener('click', () => {
+            document.querySelector('.welcome-section').style.display = 'none';
+            document.getElementById('archetypesSection').style.display = 'block';
+            this.showToast('Let\'s explore your inner landscape', 'success');
+          });
+        }
+
+        // Archetype Card Interactions
+        document.querySelectorAll('.archetype-card').forEach(card => {
+          const flipBtn = card.querySelector('.flip-btn');
+          const deeperBtn = card.querySelector('.deeper-btn');
+          
+          if (flipBtn) {
+            flipBtn.addEventListener('click', () => {
+              card.classList.add('flipped');
+              this.showToast('Card flipped!', 'info');
+            });
+          }
+          
+          if (deeperBtn) {
+            deeperBtn.addEventListener('click', () => {
+              // Add loading state to button
+              deeperBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Going Deeper...';
+              deeperBtn.disabled = true;
+              
+              setTimeout(() => {
+                card.classList.remove('flipped');
+                card.classList.add('deeper');
+                this.showToast('Going deeper into philosophy', 'success');
+                
+                // Show backdrop and philosophy content
+                const backdrop = document.getElementById('philosophyBackdrop');
+                const philosophyContent = card.querySelector('.card-philosophy');
+                
+                if (backdrop && philosophyContent) {
+                  // Show backdrop first
+                  backdrop.classList.add('show');
+                  
+                  // Move philosophy content to body level for proper positioning
+                  document.body.appendChild(philosophyContent);
+                  
+                  // Show the philosophy content with smooth opacity transition
+                  philosophyContent.style.display = 'flex';
+                  // Trigger opacity transition after a brief delay
+                  setTimeout(() => {
+                    philosophyContent.classList.add('show');
+                  }, 100);
+                }
+                
+                // Reset button after transition
+                setTimeout(() => {
+                  deeperBtn.innerHTML = 'Go Deeper';
+                  deeperBtn.disabled = false;
+                }, 1000);
+              }, 500);
+            });
+          }
+        });
+
+        // Compass Point Interactions
+        document.querySelectorAll('.compass-point').forEach(point => {
+          point.addEventListener('click', () => {
+            const archetype = point.classList.contains('id-point') ? 'id' : 
+                             point.classList.contains('ego-point') ? 'ego' : 'superego';
+            
+            // Show description modal
+            this.showArchetypeDescription(archetype);
+          });
+        });
+
+        // Identification Buttons
+        document.querySelectorAll('.identification-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            // Remove previous selections
+            document.querySelectorAll('.identification-btn').forEach(b => {
+              b.classList.remove('selected');
+            });
+            // Select current button
+            btn.classList.add('selected');
+            
+            // Show journaling section
+            document.getElementById('journalingSection').style.display = 'block';
+            
+            this.showToast('Dominant force identified!', 'success');
+          });
+        });
+
+        // Quote Carousel
+        this.setupQuoteCarousel();
+
+        // Begin Tool Button
+        const beginToolBtn = document.getElementById('beginToolBtn');
+        if (beginToolBtn) {
+          beginToolBtn.addEventListener('click', () => {
+            // Move to Phase 2
+            this.showPhase(2);
+          });
+        }
+
+        // Add logic to show sections in sequence
+        this.setupPhase1Sequence();
+      }
+
+      setupPhase1Sequence() {
+        // After archetypes are explored, show identification
+        document.querySelectorAll('.archetype-card').forEach(card => {
+          const deeperBtn = card.querySelector('.deeper-btn');
+          if (deeperBtn) {
+            deeperBtn.addEventListener('click', () => {
+              // Check if all cards have been explored
+              setTimeout(() => {
+                const allExplored = Array.from(document.querySelectorAll('.archetype-card')).every(c => 
+                  c.classList.contains('deeper')
+                );
+                if (allExplored) {
+                  setTimeout(() => {
+                    document.getElementById('archetypesSection').style.display = 'none';
+                    document.getElementById('identificationSection').style.display = 'block';
+                    this.showToast('Now let\'s identify what\'s dominant in you today', 'info');
+                  }, 2000);
+                }
+              }, 1000);
+            });
+          }
+        });
+
+        // After identification, show quote carousel
+        document.querySelectorAll('.identification-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            setTimeout(() => {
+              const journalingSection = document.getElementById('journalingSection');
+              if (journalingSection.style.display === 'block') {
+                setTimeout(() => {
+                  document.getElementById('identificationSection').style.display = 'none';
+                  document.getElementById('quoteCarouselSection').style.display = 'block';
+                  this.showToast('Let\'s reflect on some philosophical insights', 'info');
+                }, 3000);
+              }
+            }, 1000);
+          });
+        });
+
+        // After quote carousel, show integration
+        const saveQuoteBtn = document.getElementById('saveQuoteBtn');
+        if (saveQuoteBtn) {
+          saveQuoteBtn.addEventListener('click', () => {
+            setTimeout(() => {
+              document.getElementById('quoteCarouselSection').style.display = 'none';
+              document.getElementById('integrationSection').style.display = 'block';
+              this.showToast('Preparing for your journey', 'success');
+            }, 2000);
+          });
+        }
+      }
+
+      setupQuoteCarousel() {
+        let currentSlide = 1;
+        const totalSlides = 5;
+        
+        const showSlide = (slideNumber) => {
+          // Hide all slides
+          document.querySelectorAll('.quote-slide').forEach(slide => {
+            slide.classList.remove('active');
+          });
+          
+          // Show current slide
+          const currentSlideElement = document.querySelector(`[data-slide="${slideNumber}"]`);
+          if (currentSlideElement) {
+            currentSlideElement.classList.add('active');
+          }
+          
+          // Update indicators
+          document.querySelectorAll('.indicator').forEach(indicator => {
+            indicator.classList.remove('active');
+          });
+          const currentIndicator = document.querySelector(`[data-slide="${slideNumber}"]`);
+          if (currentIndicator) {
+            currentIndicator.classList.add('active');
+          }
+        };
+
+        // Next button
+        const nextBtn = document.getElementById('nextQuote');
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => {
+            currentSlide = currentSlide >= totalSlides ? 1 : currentSlide + 1;
+            showSlide(currentSlide);
+          });
+        }
+
+        // Previous button
+        const prevBtn = document.getElementById('prevQuote');
+        if (prevBtn) {
+          prevBtn.addEventListener('click', () => {
+            currentSlide = currentSlide <= 1 ? totalSlides : currentSlide - 1;
+            showSlide(currentSlide);
+          });
+        }
+
+        // Indicators
+        document.querySelectorAll('.indicator').forEach(indicator => {
+          indicator.addEventListener('click', () => {
+            const slideNumber = parseInt(indicator.dataset.slide);
+            currentSlide = slideNumber;
+            showSlide(currentSlide);
+          });
+        });
+
+        // Save quote button
+        const saveQuoteBtn = document.getElementById('saveQuoteBtn');
+        if (saveQuoteBtn) {
+          saveQuoteBtn.addEventListener('click', () => {
+            const activeSlide = document.querySelector('.quote-slide.active');
+            if (activeSlide) {
+              const quoteText = activeSlide.querySelector('p').textContent;
+              const quoteAuthor = activeSlide.querySelector('.quote-author').textContent;
+              
+              // Save to localStorage
+              const savedQuotes = JSON.parse(localStorage.getItem('savedQuotes') || '[]');
+              savedQuotes.push({ text: quoteText, author: quoteAuthor, timestamp: Date.now() });
+              localStorage.setItem('savedQuotes', JSON.stringify(savedQuotes));
+              
+              this.showToast('Quote saved for later!', 'success');
+            }
+          });
+        }
+
+        // Auto-advance carousel
+        setInterval(() => {
+          currentSlide = currentSlide >= totalSlides ? 1 : currentSlide + 1;
+          showSlide(currentSlide);
+        }, 5000);
+      }
+
+      generateNavigation() {
+        const navTabs = document.getElementById('navTabs');
+        const phases = [
+          { id: 1, name: 'Mapping', icon: 'fas fa-brain' },
+          { id: 2, name: 'Criticism', icon: 'fas fa-search' },
+          { id: 3, name: 'Origins', icon: 'fas fa-compass' },
+          { id: 4, name: 'Transformation', icon: 'fas fa-magic' },
+          { id: 5, name: 'Integration', icon: 'fas fa-seedling' }
+        ];
+
+        navTabs.innerHTML = phases.map(phase => `
+          <button class="nav-tab ${phase.id === 1 ? 'active' : ''}" data-phase="${phase.id}">
+            <i class="${phase.icon}"></i>
+            ${phase.name}
+          </button>
+        `).join('');
+
+        // Add click listeners to tabs
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+          tab.addEventListener('click', (e) => {
+            const phase = parseInt(e.currentTarget.dataset.phase);
+            this.showPhase(phase);
+          });
+        });
+      }
+
+      showPhase(phase) {
+        // Log exit from current phase
+        this.logExit(this.currentPhase);
+
+        // Update UI
+        document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+        document.getElementById(`phase${phase}`).classList.add('active');
+
+        // Update navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+          tab.classList.remove('active');
+          if (parseInt(tab.dataset.phase) === phase) {
+            tab.classList.add('active');
+          }
+        });
+
+        // Update header
+        document.getElementById('phaseLabelHeader').textContent = phase;
+        document.getElementById('phaseTotalHeader').textContent = this.totalPhases;
+
+        // Update phase badge
+        const phaseNames = ['Mapping', 'Criticism', 'Origins', 'Transformation', 'Integration'];
+        document.getElementById('phaseBadge').textContent = phaseNames[phase - 1];
+
+        // Update buttons
+        document.getElementById('prevBtn').disabled = phase === 1;
+        const nextBtn = document.getElementById('nextBtn');
+        if (phase === this.totalPhases) {
+          nextBtn.innerHTML = '<i class="fas fa-heart"></i> Complete Journey';
+        } else {
+          nextBtn.innerHTML = 'Next <i class="fas fa-arrow-right"></i>';
+        }
+
+        // Update progress
+        this.updateProgress();
+
+        // Log entry to new phase
+        this.logEntry(phase);
+        this.currentPhase = phase;
+
+        // Show relevant reflections for specific phases
+        this.showRelevantReflections(phase);
+
+        // Generate summary for final phase
+        if (phase === 5) {
+          this.generateSummary();
+        }
+      }
+
+      nextPhase() {
+        if (this.currentPhase < this.totalPhases) {
+          this.showPhase(this.currentPhase + 1);
+        } else {
+          this.showToast('Journey completed! Take time to reflect on your insights.', 'success');
+        }
+      }
+
+      showRelevantReflections(phase) {
+        if (phase === 2) {
+          // Show superego reflection in self-criticism phase
+          const selfCriticismSection = document.querySelector('#phase2 .section');
+          if (selfCriticismSection && this.getReflection('superego')) {
+            this.displayReflectionInPrompt(selfCriticismSection, 'superego');
+          }
+        } else if (phase === 3) {
+          // Show all reflections in origins phase
+          const originsSection = document.querySelector('#phase3 .section');
+          if (originsSection) {
+            if (this.getReflection('id')) {
+              this.displayReflectionInPrompt(originsSection, 'id');
+            }
+            if (this.getReflection('ego')) {
+              this.displayReflectionInPrompt(originsSection, 'ego');
+            }
+            if (this.getReflection('superego')) {
+              this.displayReflectionInPrompt(originsSection, 'superego');
+            }
+          }
+        }
+      }
+
+      prevPhase() {
+        if (this.currentPhase > 1) {
+          this.showPhase(this.currentPhase - 1);
+        }
+      }
+
+      updateProgress() {
+        const progress = (this.currentPhase / this.totalPhases) * 100;
+        document.getElementById('progressFill').style.width = `${progress}%`;
+      }
+
+      logEntry(phase) {
+        this.analytics.enter[phase] = Date.now();
+        console.log('Entered phase', phase);
+      }
+
+      logExit(phase) {
+        const enter = this.analytics.enter[phase] || Date.now();
+        this.analytics.timespent[phase] = Date.now() - enter;
+        console.log(`Time on phase ${phase}:`, this.analytics.timespent[phase], 'ms');
+      }
+
+      generateSummary() {
+        const summary = document.getElementById('transformationSummary');
+        const practices = document.getElementById('dailyPractices');
+
+        // Collect user data
+        const data = this.collectUserData();
+
+        // Generate transformation summary
+        summary.innerHTML = `
+          <h4><i class="fas fa-transform"></i> Your Rubric Transformation</h4>
+          <p><strong>Original Criticism:</strong> ${data.selfCriticism || 'Not specified'}</p>
+          <p><strong>New Compassionate Standard:</strong> ${data.compassionateStandard || 'Not specified'}</p>
+          <p><strong>How it feels:</strong> ${data.newFeeling || 'Not specified'}</p>
+        `;
+
+        // Generate daily practices
+        practices.innerHTML = `
+          <h4><i class="fas fa-calendar"></i> Daily Integration Practices</h4>
+          <div class="practice-list">
+            <div class="practice-item">
+              <i class="fas fa-sun"></i>
+              <strong>Morning Reflection:</strong> Start each day by acknowledging your new compassionate standard
+            </div>
+            <div class="practice-item">
+              <i class="fas fa-pause"></i>
+              <strong>Mindful Pause:</strong> When you hear the old critic, pause and replace it with your new voice
+            </div>
+            <div class="practice-item">
+              <i class="fas fa-journal-whills"></i>
+              <strong>Evening Journal:</strong> Write about how your new perspective influenced your day
+            </div>
+            <div class="practice-item">
+              <i class="fas fa-heart"></i>
+              <strong>Self-Compassion:</strong> Remember that transformation is a process, not perfection
+            </div>
+          </div>
+        `;
+      }
+
+      collectUserData() {
+        return {
+          selfCriticism: document.getElementById('selfCriticism')?.value,
+          criticismTrigger: document.getElementById('criticismTrigger')?.value,
+          whoBenefits: document.getElementById('whoBenefits')?.value,
+          compassionateStandard: document.getElementById('compassionateStandard')?.value,
+          newFeeling: document.getElementById('newFeeling')?.value,
+          newActions: document.getElementById('newActions')?.value
+        };
+      }
+
+      showModal(modalId) {
+        document.getElementById(modalId).style.display = 'flex';
+      }
+
+      hideModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+      }
+
+      hidePhilosophyBackdrop() {
+        const backdrop = document.getElementById('philosophyBackdrop');
+        const philosophyContent = document.querySelector('.card-philosophy.show');
+        
+        if (backdrop && philosophyContent) {
+          // Save any reflection before closing
+          const textarea = philosophyContent.querySelector('.reflection-input');
+          if (textarea && textarea.value.trim()) {
+            this.saveReflection(textarea);
+          }
+          
+          backdrop.classList.remove('show');
+          philosophyContent.classList.remove('show');
+          
+          setTimeout(() => {
+            philosophyContent.style.display = 'none';
+            // Move philosophy content back to its original card
+            const originalCard = document.querySelector('.archetype-card.deeper');
+            if (originalCard) {
+              originalCard.querySelector('.card-inner').appendChild(philosophyContent);
+            }
+          }, 300);
+        }
+      }
+
+      setupReflectionHandlers() {
+        // Handle reflection input events
+        document.addEventListener('keydown', (e) => {
+          if (e.target.classList.contains('reflection-input')) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              this.saveReflection(e.target);
+              // Don't auto-close when Enter button is present
+              // User should click the Enter button to close
+            }
+          }
+        });
+
+        // Handle reflection input changes
+        document.addEventListener('input', (e) => {
+          if (e.target.classList.contains('reflection-input')) {
+            this.autoSaveReflection(e.target);
+          }
+        });
+      }
+
+      saveReflection(textarea) {
+        const archetype = textarea.dataset.archetype;
+        const value = textarea.value.trim();
+        
+        if (value) {
+          this.reflections[archetype] = value;
+          localStorage.setItem('superegoReflections', JSON.stringify(this.reflections));
+          
+          // Visual feedback
+          textarea.classList.add('reflection-saved');
+          const indicator = textarea.parentElement.querySelector('.saved-indicator');
+          if (indicator) {
+            indicator.classList.add('show');
+            setTimeout(() => indicator.classList.remove('show'), 2000);
+          }
+          
+          this.showToast('Reflection saved!', 'success');
+        }
+      }
+
+      autoSaveReflection(textarea) {
+        const archetype = textarea.dataset.archetype;
+        const value = textarea.value.trim();
+        
+        if (value) {
+          this.reflections[archetype] = value;
+          localStorage.setItem('superegoReflections', JSON.stringify(this.reflections));
+        }
+      }
+
+      loadReflections() {
+        const saved = localStorage.getItem('superegoReflections');
+        if (saved) {
+          this.reflections = JSON.parse(saved);
+          
+          // Populate textareas with saved reflections
+          Object.keys(this.reflections).forEach(archetype => {
+            const textarea = document.querySelector(`[data-archetype="${archetype}"]`);
+            if (textarea && this.reflections[archetype]) {
+              textarea.value = this.reflections[archetype];
+            }
+          });
+        }
+      }
+
+      getReflection(archetype) {
+        return this.reflections[archetype] || '';
+      }
+
+      displayReflectionInPrompt(promptElement, archetype) {
+        const reflection = this.getReflection(archetype);
+        if (reflection) {
+          const reflectionDisplay = document.createElement('div');
+          reflectionDisplay.className = 'previous-reflection';
+          reflectionDisplay.innerHTML = `
+            <h6>Your previous reflection on ${archetype}:</h6>
+            <blockquote>"${reflection}"</blockquote>
+          `;
+          promptElement.insertBefore(reflectionDisplay, promptElement.firstChild);
+        }
+      }
+
+      saveProgress() {
+        const data = this.collectUserData();
+        data.timestamp = Date.now();
+        data.currentPhase = this.currentPhase;
+        
+        localStorage.setItem('superegoProgress', JSON.stringify(data));
+        this.showToast('Journey saved successfully!', 'success');
+      }
+
+      loadUserData() {
+        const saved = localStorage.getItem('superegoProgress');
+        if (saved) {
+          const data = JSON.parse(saved);
+          Object.keys(data).forEach(key => {
+            const element = document.getElementById(key);
+            if (element && data[key]) {
+              element.value = data[key];
+            }
+          });
+          
+          if (data.currentPhase) {
+            this.showPhase(data.currentPhase);
+          }
+          
+          this.showToast('Previous journey loaded', 'info');
+        }
+      }
+
+      autoSave() {
+        // Debounced auto-save
+        clearTimeout(this.autoSaveTimeout);
+        this.autoSaveTimeout = setTimeout(() => {
+          this.saveProgress();
+        }, 2000);
+      }
+
+      restart() {
+        if (confirm('Are you sure you want to restart your journey? All progress will be lost.')) {
+          localStorage.removeItem('superegoProgress');
+          location.reload();
+        }
+      }
+
+      showArchetypeDescription(archetype) {
+        const modal = document.getElementById('archetypeModal');
+        const title = document.getElementById('archetypeTitle');
+        const icon = document.getElementById('archetypeIcon');
+        const description = document.getElementById('archetypeDescription');
+        
+        const archetypeData = {
+          id: {
+            title: 'The Id',
+            icon: 'fas fa-fire',
+            description: `
+              <h3>The Wild One</h3>
+              <p>The Id represents your primal psychic energy - the source of all your basic drives, desires, and instincts. It operates according to the pleasure principle, seeking immediate gratification without concern for consequences.</p>
+              <h4>Key Characteristics:</h4>
+              <ul>
+                <li><strong>Unconscious:</strong> Works below the level of awareness</li>
+                <li><strong>Pleasure-seeking:</strong> Driven by basic needs and desires</li>
+                <li><strong>Creative:</strong> Source of artistic and creative impulses</li>
+                <li><strong>Irrational:</strong> Not bound by logic or social rules</li>
+              </ul>
+              <p><strong>Philosophical Insight:</strong> "The unconscious is productive, not representational." - Deleuze & Guattari</p>
+            `
+          },
+          ego: {
+            title: 'The Ego',
+            icon: 'fas fa-eye',
+            description: `
+              <h3>The Mediator</h3>
+              <p>The Ego is your conscious self - the part of your psyche that tries to balance the demands of the Id with the constraints of reality and the Superego. It operates according to the reality principle.</p>
+              <h4>Key Characteristics:</h4>
+              <ul>
+                <li><strong>Conscious:</strong> The part of yourself you're aware of</li>
+                <li><strong>Rational:</strong> Uses logic and reason to make decisions</li>
+                <li><strong>Mediating:</strong> Balances competing demands</li>
+                <li><strong>Adaptive:</strong> Learns and adjusts to reality</li>
+              </ul>
+              <p><strong>Philosophical Insight:</strong> "The self as a critique machine — bound by the transcendental." - Kant</p>
+            `
+          },
+          superego: {
+            title: 'The Superego',
+            icon: 'fas fa-gavel',
+            description: `
+              <h3>The Judge</h3>
+              <p>The Superego represents your internalized moral standards and ideals. It acts as your conscience, enforcing rules and expectations that you've learned from society, family, and culture.</p>
+              <h4>Key Characteristics:</h4>
+              <ul>
+                <li><strong>Moral:</strong> Enforces ethical standards and values</li>
+                <li><strong>Critical:</strong> Judges thoughts, feelings, and actions</li>
+                <li><strong>Internalized:</strong> Absorbs external standards and rules</li>
+                <li><strong>Perfectionistic:</strong> Often sets impossibly high standards</li>
+              </ul>
+              <p><strong>Philosophical Insight:</strong> "The superego is a social machine — internalized police." - Roesler</p>
+            `
+          }
+        };
+        
+        const data = archetypeData[archetype];
+        title.innerHTML = `<i class="fas fa-brain"></i> ${data.title}`;
+        icon.innerHTML = `<i class="${data.icon}"></i>`;
+        icon.className = `archetype-icon ${archetype}`;
+        description.innerHTML = data.description;
+        
+        this.showModal('archetypeModal');
+      }
+
+      showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `
+          <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+          ${message}
+        `;
+        
+        document.getElementById('toastContainer').appendChild(toast);
+        
+        setTimeout(() => toast.classList.add('show'), 100);
+        setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+    }
+
+    // Initialize the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      window.superegoApp = new SuperegoCritiqueApp();
+    });
+
+    // Add CSS for practice items
+    const style = document.createElement('style');
+    style.textContent = `
+      .practice-list {
+        margin-top: 1rem;
+      }
+      .practice-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .practice-item:last-child {
+        border-bottom: none;
+      }
+      .practice-item i {
+        color: var(--primary);
+        margin-top: 0.25rem;
+      }
+      .nav-buttons-right {
+        display: flex;
+        gap: 0.5rem;
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html> 
